@@ -93,6 +93,13 @@ namespace K_means_clustering
             return new Vector(dimensions);
         }
 
+        public Vector Clone()
+        {
+            Vector clone = new Vector(dimensions);
+            clone.clusterId = clusterId;
+            return clone;
+        }
+
         public override string ToString()
         {
             string concatenation = "";
@@ -101,7 +108,7 @@ namespace K_means_clustering
                 concatenation += dimension + ",";
             }
             concatenation = concatenation.Substring(0, concatenation.Length - 1);
-            return string.Format("Vector[{0}]", concatenation);
+            return string.Format("Vector[clusterId: {0}, dimensions: {1}]", clusterId, concatenation);
         }
     }
 }
