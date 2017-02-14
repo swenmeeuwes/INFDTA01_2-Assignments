@@ -66,6 +66,52 @@ namespace K_means_clustering
             return Math.Sqrt(squaredDimensions);
         }
 
+        public static Vector operator *(Vector v1, Vector v2)
+        {
+            if (v1.dimensions.Length != v2.dimensions.Length)
+                throw new Exception("Can't compute the distance between vectors with a different amount of dimensions.");
+
+            float[] dimensions = new float[v1.dimensions.Length];
+            for (int i = 0; i < v1.dimensions.Length; i++)
+            {
+                dimensions[i] += v1.dimensions[i] * v2.dimensions[i];
+            }
+            return new Vector(dimensions);
+        }
+
+        public static Vector operator *(Vector v1, int n)
+        {
+            float[] dimensions = new float[v1.dimensions.Length];
+            for (int i = 0; i < v1.dimensions.Length; i++)
+            {
+                dimensions[i] += v1.dimensions[i] * n;
+            }
+            return new Vector(dimensions);
+        }
+
+        public static Vector operator /(Vector v1, Vector v2)
+        {
+            if (v1.dimensions.Length != v2.dimensions.Length)
+                throw new Exception("Can't compute the distance between vectors with a different amount of dimensions.");
+
+            float[] dimensions = new float[v1.dimensions.Length];
+            for (int i = 0; i < v1.dimensions.Length; i++)
+            {
+                dimensions[i] += v1.dimensions[i] / v2.dimensions[i];
+            }
+            return new Vector(dimensions);
+        }
+
+        public static Vector operator /(Vector v1, int n)
+        {
+            float[] dimensions = new float[v1.dimensions.Length];
+            for (int i = 0; i < v1.dimensions.Length; i++)
+            {
+                dimensions[i] += v1.dimensions[i] / n;
+            }
+            return new Vector(dimensions);
+        }
+
         public static Vector operator +(Vector v1, Vector v2)
         {
             if (v1.dimensions.Length != v2.dimensions.Length)
@@ -104,7 +150,7 @@ namespace K_means_clustering
             string concatenation = "";
             foreach (var dimension in dimensions)
             {
-                concatenation += dimension + ",";
+                concatenation += dimension + "|";
             }
             concatenation = concatenation.Substring(0, concatenation.Length - 1);
             return string.Format("Vector[clusterId: {0}, dimensions: {1}]", clusterId, concatenation);
