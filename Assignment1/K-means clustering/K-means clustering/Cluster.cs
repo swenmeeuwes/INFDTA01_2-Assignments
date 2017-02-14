@@ -10,16 +10,14 @@ namespace K_means_clustering
     {
         public int id { get; set; }
         public Vector centroid { get; set; }
-
-        public Cluster()
-        {
-
-        }
+        public int size { get; set; }
 
         public Cluster(int id, Vector centroid)
         {
             this.id = id;
             this.centroid = centroid;
+
+            this.size = 0;
         }
 
         public override string ToString()

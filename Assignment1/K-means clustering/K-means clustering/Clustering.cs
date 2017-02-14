@@ -8,7 +8,7 @@ namespace K_means_clustering
 {
     class Clustering
     {
-        public static Vector[] AssignClusterIds(int amountOfClusters, Vector[] observations) // Where amount of clusters is the 'K' value
+        public static Vector[] AssignClusterIds(int amountOfClusters, int iterations, Vector[] observations) // Where amount of clusters is the 'K' value
         {
             if (amountOfClusters <= 1)
                 throw new Exception("Must have 2 or more clusters");
@@ -21,16 +21,25 @@ namespace K_means_clustering
             {
                 var centroidIndex = random.Next(possibleCentroids.Count);
                 clusters[i] = new Cluster(i, possibleCentroids[centroidIndex]);
-                possibleCentroids.RemoveAt(centroidIndex);
+                possibleCentroids.RemoveAt(centroidIndex); // Make sure the same observation doesn't get picked as centroid for the cluster
             }
 
-            ClusterIteration(clusters, observations);
-
-            return observations;
+            return ClusterIteration(clusters, observations, iterations, 0);
         }
 
-        static void ClusterIteration(Cluster[] clusters, Vector[] observations)
+        // Implement if centroids are the same return
+        // Assumption: cluster array is sorted on clusterId from 0 to N
+        static Vector[] ClusterIteration(Cluster[] clusters, Vector[] observations, int iterations, int iterationStep)
         {
+            if (iterationStep >= iterations)
+                return observations;
+
+            float sumOfSquaredErrors = 0;
+            Vector[] observationSums = new Vector[clusters.Length]; // Used to save the sum of observation tuples by cluster id, where the index of the array is the cluster id
+            for (int i = 0; i < observationSums.Length; i++)
+                observationSums[i] = new Vector(new float[observations[0].dimensions.Length]);
+
+            // Compute nearest cluster for each observation
             for (int i = 0; i < observations.Length; i++)
             {
                 var nearestCluster = clusters[0];
@@ -44,9 +53,28 @@ namespace K_means_clustering
                         nearestCentroidDistance = distance;
                     }
                 }
+                nearestCluster.size++;
                 observations[i].clusterId = nearestCluster.id;
-                Console.WriteLine(observations[i]);
+                observationSums[nearestCluster.id] += observations[i];
+
+                sumOfSquaredErrors += (float)Math.Pow(nearestCentroidDistance, 2);
             }
+
+            // Adjust centroids to observation average  
+            for (int j = 0; j < clusters.Length; j++)
+            {
+                var centroid = observationSums[j] / clusters[j].size;
+
+                if(centroid == clusters[j].centroid)
+                    Console.WriteLine("Centroid of cluster {0} is the same!", j);
+
+                clusters[j].centroid = centroid;
+                clusters[j].size = 0;
+            }
+
+            Console.WriteLine("SSE: {0}", sumOfSquaredErrors);
+
+            return ClusterIteration(clusters, observations, iterations, iterationStep + 1);
         }
     }
 }

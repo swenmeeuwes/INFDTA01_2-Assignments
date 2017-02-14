@@ -45,14 +45,10 @@ namespace K_means_clustering
                 }
             };
 
-            Clustering.AssignClusterIds(3, observations.ToArray());
+            Clustering.AssignClusterIds(2, 20, observations.ToArray());
 
-
-            // TEST
-            //Vector[] testVectorArray = new Vector[] { new Vector(1, 1), new Vector(1, 2), new Vector(2, 2), new Vector(3, 3), new Vector(4, 4), new Vector(3, 4) };
-            //var testResult = Clustering.AssignClusterIds(3, testVectorArray);
-
-            //Console.ReadLine();
+            Console.WriteLine("Done!");
+            Console.ReadLine();
         }
     }
 }
