@@ -77,5 +77,16 @@ namespace K_means_clustering
             }
             return new Vector(dimensions);
         }
+
+        public override string ToString()
+        {
+            string concatenation = "";
+            foreach (var dimension in dimensions)
+            {
+                concatenation += dimensions + ",";
+            }
+            concatenation = concatenation.Substring(0, concatenation.Length - 1);
+            return string.Format("Vector[{0}]", concatenation);
+        }
     }
 }
