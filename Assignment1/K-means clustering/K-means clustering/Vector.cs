@@ -34,6 +34,24 @@ namespace K_means_clustering
             this.dimensions = dimensions;
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return dimensions.GetEnumerator();
+        }
+
+        public static double Distance(Vector v1, Vector v2)
+        {
+            if (v1.dimensions.Length != v2.dimensions.Length)
+                throw new Exception("Can't compute the distance between vectors with a different amount of dimensions.");
+
+            double squaredDimensions = 0;
+            for (int i = 0; i < v1.dimensions.Length; i++)
+            {
+                squaredDimensions += Math.Pow(v1.dimensions[i] - v2.dimensions[i], 2);
+            }
+            return Math.Sqrt(squaredDimensions);
+        }
+
         public double Distance(Vector v2)
         {
             if (this.dimensions.Length != v2.dimensions.Length)
@@ -45,11 +63,6 @@ namespace K_means_clustering
                 squaredDimensions += Math.Pow(this.dimensions[i] - v2.dimensions[i], 2);
             }
             return Math.Sqrt(squaredDimensions);
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return dimensions.GetEnumerator();
         }
 
         public static Vector operator +(Vector v1, Vector v2)
@@ -83,7 +96,7 @@ namespace K_means_clustering
             string concatenation = "";
             foreach (var dimension in dimensions)
             {
-                concatenation += dimensions + ",";
+                concatenation += dimension + ",";
             }
             concatenation = concatenation.Substring(0, concatenation.Length - 1);
             return string.Format("Vector[{0}]", concatenation);
