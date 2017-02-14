@@ -11,6 +11,8 @@ namespace K_means_clustering
     {
         float[] dimensions;
 
+        public int clusterId { get; set; }
+
         public double length
         {
             get
