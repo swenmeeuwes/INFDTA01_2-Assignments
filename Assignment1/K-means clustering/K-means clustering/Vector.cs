@@ -9,9 +9,8 @@ namespace K_means_clustering
 {
     class Vector : IEnumerable
     {
-        float[] dimensions;
-
         public int clusterId { get; set; }
+        public float[] dimensions { get; set; }
 
         public double length
         {
