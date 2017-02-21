@@ -1,0 +1,6 @@
+F:\Github\DataScience\Assignment1\K-means clustering\K-means clustering\bin\Debug\K-means clustering.exe.config
+F:\Github\DataScience\Assignment1\K-means clustering\K-means clustering\bin\Debug\K-means clustering.exe
+F:\Github\DataScience\Assignment1\K-means clustering\K-means clustering\bin\Debug\K-means clustering.pdb
+F:\Github\DataScience\Assignment1\K-means clustering\K-means clustering\obj\Debug\K-means clustering.csprojResolveAssemblyReference.cache
+F:\Github\DataScience\Assignment1\K-means clustering\K-means clustering\obj\Debug\K-means clustering.exe
+F:\Github\DataScience\Assignment1\K-means clustering\K-means clustering\obj\Debug\K-means clustering.pdb
