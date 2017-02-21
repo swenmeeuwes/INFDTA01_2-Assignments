@@ -62,7 +62,7 @@ namespace K_means_clustering
                 observations[i].clusterId = nearestCluster.id;
                 observationSums[nearestCluster.id] += observations[i];
 
-                sumOfSquaredErrors += (float)nearestCentroidDistance;// USE => (float)Math.Pow(nearestCentroidDistance, 2);
+                sumOfSquaredErrors += (float)Math.Pow(nearestCentroidDistance, 2);
             }
 
             // Adjust centroids to observation average  
