@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Cluster.cs" />
     <Compile Include="Clustering.cs" />
+    <Compile Include="ClusteringExtensionMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector.cs" />

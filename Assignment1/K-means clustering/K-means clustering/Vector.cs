@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace K_means_clustering
 {
-    class Vector : IEnumerable
+    public class Vector : IEnumerable
     {
         public int clusterId { get; set; }
         public float[] dimensions { get; set; }

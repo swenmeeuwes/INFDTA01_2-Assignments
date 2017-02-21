@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace K_means_clustering
 {
+    [Obsolete]
     class Clustering
     {
         public static Vector[] AssignClusterIds(int amountOfClusters, int iterations, Vector[] observations) // Where amount of clusters is the 'K' value
@@ -57,7 +58,7 @@ namespace K_means_clustering
                 observations[i].clusterId = nearestCluster.id;
                 observationSums[nearestCluster.id] += observations[i];
 
-                sumOfSquaredErrors += (float)Math.Pow(nearestCentroidDistance, 2);
+                sumOfSquaredErrors += (float)nearestCentroidDistance;// USE => (float)Math.Pow(nearestCentroidDistance, 2);
             }
 
             // Adjust centroids to observation average  
