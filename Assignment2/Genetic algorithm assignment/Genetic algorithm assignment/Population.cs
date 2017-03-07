@@ -24,8 +24,25 @@ namespace Genetic_algorithm_assignment
             return new Population(individuals);
         }
 
-        public Population Evolve(bool useElitism)
+        public Population GenericAlgorithm(Population population, int iterations, SelectionMethod selectionMethod = SelectionMethod.ROULETTE, bool useElitism = false)
         {
+            switch(selectionMethod)
+            {
+                case SelectionMethod.ROULETTE: // Not applicable for negative fitness values?  -> http://stackoverflow.com/questions/16186686/genetic-algorithm-handling-negative-fitness-values
+                    throw new NotImplementedException();
+                case SelectionMethod.RANK: 
+                    throw new NotImplementedException();
+                case SelectionMethod.TOURNAMENT:
+                    throw new NotImplementedException();
+                default:
+                    throw new Exception("There is no such selection method");
+            }
+        }
+
+        public Population RouletteIteration(Population population, bool useElitism, int iterationAmount, int iteration)
+        {
+            if (iteration > iterationAmount)
+                return population;
             throw new NotImplementedException();
         }
     }

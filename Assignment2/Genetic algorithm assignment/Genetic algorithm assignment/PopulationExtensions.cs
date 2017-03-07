@@ -8,9 +8,9 @@ namespace Genetic_algorithm_assignment
 {
     static class PopulationExtensions
     {
-        public static Population GenericAlgorithm(this Population population)
-        {
-            throw new NotImplementedException();
-        }
+        //public static Population GenericAlgorithm(this Population population, int iterations, bool useElitism = false)
+        //{
+        //    return population.Evolve(useElitism);
+        //}
     }
 }
