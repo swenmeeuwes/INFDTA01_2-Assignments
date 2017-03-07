@@ -58,9 +58,12 @@ namespace K_means_clustering
             // With extension method
             List<Tuple<Vector[], float>> resultScoreDictionary = new List<Tuple<Vector[], float>>();
             // Parameters to play with
-            var algorithmAmount = 1000; // How many times the KMean-algorithm will be executed
-            var amountOfClusters = 5; // K-value in the KMean-algorithm
-            var kmeanIterations = 10; // Iterations within the KMean-algorithm
+            Console.WriteLine("Please specify the amount of algorithms that should be run. (Default: 1000)");
+            var algorithmAmount = PromptInteger(1000); // How many times the KMean-algorithm will be executed
+            Console.WriteLine("Please specify the amount of clusters the algorithm should make. (Default: 5)");
+            var amountOfClusters = PromptInteger(5); // K-value in the KMean-algorithm
+            Console.WriteLine("Please specify the amount of iterations the algorithm should run. (Default: 10)");
+            var kmeanIterations = PromptInteger(10); // Iterations within the KMean-algorithm
             // End of parameters
             Console.WriteLine("Configuration:");
             Console.WriteLine("K-value (amount of clusters): {0}", amountOfClusters);
@@ -93,6 +96,26 @@ namespace K_means_clustering
             Console.WriteLine("Done!");
             Console.WriteLine("Finished in {0} milliseconds!", stopwatch.ElapsedMilliseconds);
             Console.ReadLine();
+        }
+
+        static int PromptInteger(int defaultNumericValue)
+        {
+            var input = Console.ReadLine();
+
+            if (input.Length == 0)
+            {
+                Console.WriteLine("Using provided default value: {0}", defaultNumericValue);
+                return defaultNumericValue;
+            }
+
+            int inputInt;
+            bool isNumeric = int.TryParse(input, out inputInt);
+            if(!isNumeric)
+            {
+                Console.WriteLine("Please enter a numeric value");
+                return PromptInteger(defaultNumericValue);
+            }
+            return inputInt;
         }
     }
 }
