@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Genetic_algorithm_assignment
 {
-    enum SectionMethod
+    enum SelectionMethod
     {
         ROULETTE,
         RANK,
