@@ -8,7 +8,7 @@ namespace K_means_clustering
 {
     public static class ClusteringExtensionMethods
     {
-        
+
         /// <summary>
         /// Executes the KMean-algorithm over the vector array.
         /// </summary>
@@ -16,7 +16,7 @@ namespace K_means_clustering
         /// <param name="amountOfClusters">The amount of clusters, also known as the K-value</param>
         /// <param name="iterations">The amount of algorithm iterations</param>
         /// <returns></returns>
-        public static float KMean(this Vector[] observations, int amountOfClusters, int iterations)
+        public static Tuple<Cluster[], float> KMean(this Vector[] observations, int amountOfClusters, int iterations)
         {
             if (amountOfClusters <= 1)
                 throw new Exception("Must have 2 or more clusters");
@@ -37,12 +37,18 @@ namespace K_means_clustering
 
         // Implement if centroids are the same return
         // Assumption: cluster array is sorted on clusterId from 0 to N
-        static float ClusterIteration(Cluster[] clusters, Vector[] observations, int iterations, int iterationStep)
+        static Tuple<Cluster[], float> ClusterIteration(Cluster[] clusters, Vector[] observations, int iterations, int iterationStep)
         {
             float sumOfSquaredErrors = 0;
             Vector[] observationSums = new Vector[clusters.Length]; // Used to save the sum of observation tuples by cluster id, where the index of the array is the cluster id
             for (int i = 0; i < observationSums.Length; i++)
                 observationSums[i] = new Vector(new float[observations[0].dimensions.Length]);
+
+            // Set size of clusters to 0
+            for (int j = 0; j < clusters.Length; j++)
+            {
+                clusters[j].size = 0;
+            }
 
             // Compute nearest cluster for each observation
             for (int i = 0; i < observations.Length; i++)
@@ -74,11 +80,10 @@ namespace K_means_clustering
                     Console.WriteLine("Centroid of cluster {0} is the same!", j);
 
                 clusters[j].centroid = centroid;
-                clusters[j].size = 0;
             }
 
             if (iterationStep >= iterations)
-                return sumOfSquaredErrors;
+                return new Tuple<Cluster[], float>(clusters, sumOfSquaredErrors);
 
             return ClusterIteration(clusters, observations, iterations, iterationStep + 1);
         }

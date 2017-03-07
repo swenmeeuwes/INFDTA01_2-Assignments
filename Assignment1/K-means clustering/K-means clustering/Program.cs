@@ -16,7 +16,6 @@ namespace K_means_clustering
         static void Main(string[] args)
         {
             stopwatch = new Stopwatch();
-            stopwatch.Start();
 
             if (args.Length <= 0 || args.Length > 2)
             {
@@ -56,7 +55,7 @@ namespace K_means_clustering
             //    Clustering.AssignClusterIds(2, 20, observations.ToArray());
 
             // With extension method
-            List<Tuple<Vector[], float>> resultScoreDictionary = new List<Tuple<Vector[], float>>();
+            List<Tuple<Cluster[], float>> resultScoreDictionary = new List<Tuple<Cluster[], float>>();
             // Parameters to play with
             Console.WriteLine("Please specify the amount of algorithms that should be run. (Default: 1000)");
             var algorithmAmount = PromptInteger(1000); // How many times the KMean-algorithm will be executed
@@ -69,11 +68,14 @@ namespace K_means_clustering
             Console.WriteLine("K-value (amount of clusters): {0}", amountOfClusters);
             Console.WriteLine("Iterations within the KMean-algorithm: {0}", kmeanIterations);
             Console.WriteLine("Executing the KMean-algorithm {0} times over the dataset ...", algorithmAmount);
+
+            stopwatch.Start();
+
             for (int i = 0; i < algorithmAmount; i++)
             {
                 Vector[] observationsClone = (Vector[])observations.ToArray().Clone();
-                var sse = observationsClone.KMean(amountOfClusters, kmeanIterations);
-                resultScoreDictionary.Add(new Tuple<Vector[], float>(observationsClone, sse));
+                Tuple<Cluster[], float> result = observationsClone.KMean(amountOfClusters, kmeanIterations);
+                resultScoreDictionary.Add(result);
             }
 
             // Get lowest SSE
@@ -93,6 +95,16 @@ namespace K_means_clustering
             Console.WriteLine("Lowest SSE: {0}", lowestSSE);
 
             stopwatch.Stop();
+
+            // Print cluster sizes
+            Console.WriteLine();
+            Console.WriteLine("OUTPUT Cluster sizes");
+            for (int i = 0; i < bestResult.Length; i++)
+            {
+                Console.WriteLine("Cluster {0} has a size of {1}", bestResult[i].id, bestResult[i].size);
+            }
+
+            Console.WriteLine();
             Console.WriteLine("Done!");
             Console.WriteLine("Finished in {0} milliseconds!", stopwatch.ElapsedMilliseconds);
             Console.ReadLine();

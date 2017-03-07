@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace K_means_clustering
 {
-    class Cluster
+    public class Cluster
     {
         public int id { get; set; }
         public Vector centroid { get; set; }
