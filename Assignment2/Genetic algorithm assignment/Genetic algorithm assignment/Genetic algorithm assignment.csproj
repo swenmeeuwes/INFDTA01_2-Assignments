@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="IIndividual.cs" />
     <Compile Include="Individual.cs" />
+    <Compile Include="Pool.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="PopulationExtensions.cs" />
     <Compile Include="Program.cs" />
