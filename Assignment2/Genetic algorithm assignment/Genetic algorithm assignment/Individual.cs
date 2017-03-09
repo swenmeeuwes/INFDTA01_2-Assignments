@@ -15,12 +15,7 @@ namespace Genetic_algorithm_assignment
         {
             get
             {
-                int decodedValue = 0;
-                for (int i = 0; i < genes.Length; i++)
-                {
-                    if (genes[i] == 1)
-                        decodedValue += (int)Math.Pow(2, i);
-                }
+                int decodedValue = this.DecodeGenes();
                 return (float)(-(Math.Pow(decodedValue, 2)) + 7 * decodedValue);
             }
         }
@@ -66,7 +61,7 @@ namespace Genetic_algorithm_assignment
             return new Individual(genePool);
         }
 
-        public Individual Mutate(float mutationRate)
+        public Individual AttemptMutation(float mutationRate)
         {
             byte[] genePool = new byte[this.genes.Length];
             for (int i = 0; i < this.genes.Length; i++)
@@ -78,6 +73,17 @@ namespace Genetic_algorithm_assignment
                     genePool[i] = this.genes[i];
             }
             return new Individual(genePool);
+        }
+
+        public int DecodeGenes()
+        {
+            int decodedValue = 0;
+            for (int i = 0; i < genes.Length; i++)
+            {
+                if (genes[i] == 1)
+                    decodedValue += (int)Math.Pow(2, i);
+            }
+            return decodedValue;
         }
 
         // Overwritten methods
