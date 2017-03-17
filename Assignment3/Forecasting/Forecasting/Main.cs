@@ -17,15 +17,14 @@ namespace Forecasting
         {
             InitializeComponent();
 
-            chart_forcastingSes.Series.Clear();
+            var dataPoints = new DataProvider().GetData();
 
-            chart_forcastingSes.Series.Add("Cool");
-            chart_forcastingSes.Series["Cool"].ChartType = SeriesChartType.Line;
-            chart_forcastingSes.Series["Cool"].Points.AddY(1);
-            chart_forcastingSes.Series["Cool"].Points.AddY(8);
-            chart_forcastingSes.Series["Cool"].Points.AddY(4);
+            var chart = new ChartWrapper(chart_forcasting);
+            chart.AddSeries(SeriesNames.Data, SeriesChartType.Line, dataPoints);
+            chart.AddSeries(SeriesNames.Ses, SeriesChartType.Line, dataPoints);
+
+            var seriesSes = chart.GetSeries(SeriesNames.Ses).ForecastSes(0.2f);
+            chart.SetSeries(SeriesNames.Ses, seriesSes);
         }
-
-        
     }
 }

@@ -33,6 +33,18 @@ namespace Forecasting
             UpdateSeries();
         }
 
+        public void SetSeries(SeriesNames id, Series series)
+        {
+            content[id] = series;
+
+            UpdateSeries();
+        }
+
+        public Series GetSeries(SeriesNames id)
+        {
+            return content[id];
+        }
+
         private void UpdateSeries()
         {
             chart.Series.Clear();
