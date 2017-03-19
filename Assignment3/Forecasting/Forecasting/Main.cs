@@ -23,8 +23,15 @@ namespace Forecasting
             chart.AddSeries(SeriesNames.Data, SeriesChartType.Line, dataPoints);
             chart.AddSeries(SeriesNames.Ses, SeriesChartType.Line, dataPoints);
 
-            var seriesSes = chart.GetSeries(SeriesNames.Ses).ForecastSes(0.2f);
+            var smoothingCoefficient = 0f; // SES alpha
+            var sesSquaredError = 0f;
+            var seriesSes = chart.GetSeries(SeriesNames.Ses).FindForecastSesWithLowestError(0.01f, 11, out smoothingCoefficient, out sesSquaredError);
+            //var seriesSes = chart.GetSeries(SeriesNames.Ses).ForecastSes(smoothingCoefficient, 11, out sesSquaredError);
             chart.SetSeries(SeriesNames.Ses, seriesSes);
+
+            // Print to UI
+            textBox_sesAlpha.Text = smoothingCoefficient.ToString();
+            textBox_sesError.Text = sesSquaredError.ToString();
         }
     }
 }
