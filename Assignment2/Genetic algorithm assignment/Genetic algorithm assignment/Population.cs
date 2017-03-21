@@ -54,7 +54,27 @@ namespace Genetic_algorithm_assignment
             }
 
             var successors = new List<Individual>();
-            for (int i = 0; i < population.individuals.Length / 2; i++)
+            int populationStartOffset = 0;
+            if (useElitism)
+            {
+                List<Individual> topList = population.individuals.OrderByDescending((individual) => (individual.Fitness)).ToList();
+
+                // The top 2 'elitists' are guaranteed to produce offsprings, because life just isn't fair sometimes ...
+                var elitist1 = topList[0];
+                var elitist2 = topList[1];
+
+                var offspring1 = elitist1.Crossover(elitist2, crossoverRate);
+                offspring1 = offspring1.AttemptMutation(mutationRate);
+                successors.Add(offspring1);
+
+                var offspring2 = elitist2.Crossover(elitist1, crossoverRate);
+                offspring2 = offspring2.AttemptMutation(mutationRate);
+                successors.Add(offspring2);
+
+                populationStartOffset = 2;
+            }
+
+            for (int i = populationStartOffset / 2; i < population.individuals.Length / 2; i++)
             {
                 // Pick 2 lucky winners
                 var winner1 = individualPool.PickWinner(true); // Keep winner in pool, meaning it can mate with itself ...

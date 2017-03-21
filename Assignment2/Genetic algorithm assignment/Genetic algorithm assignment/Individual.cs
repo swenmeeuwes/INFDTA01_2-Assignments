@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Genetic_algorithm_assignment
 {
-    class Individual
+    class Individual: IComparable<Individual>
     {
         static Random random = new Random();
 
@@ -84,6 +84,11 @@ namespace Genetic_algorithm_assignment
                     decodedValue += (int)Math.Pow(2, i);
             }
             return decodedValue;
+        }
+
+        public int CompareTo(Individual individual)
+        {
+            return (int)(this.Fitness - individual.Fitness);
         }
 
         // Overwritten methods
