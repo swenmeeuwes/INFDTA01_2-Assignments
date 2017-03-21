@@ -10,8 +10,8 @@ namespace Genetic_algorithm_assignment
     {
         static void Main(string[] args)
         {
-            var population = Population.CreateRandomPopulation(10);
-            var evolvedPopulation = population.GenericAlgorithm(0.95f, 0.01f, 10);
+            var population = Population.CreateRandomPopulation(25);
+            var evolvedPopulation = population.GenericAlgorithm(0.95f, 0.01f, 25, SelectionMethod.ROULETTE, true);
 
             Console.WriteLine("INFORMATION ABOUT THE LAST GENERATION");
 
