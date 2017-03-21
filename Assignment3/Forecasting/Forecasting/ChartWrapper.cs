@@ -24,6 +24,7 @@ namespace Forecasting
         {
             var series = new Series(id.ToString());
             series.ChartType = type;
+
             for (int i = 0; i < data.Length; i++)
             {
                 series.Points.AddXY(data[i].Item1, data[i].Item2);
@@ -36,6 +37,7 @@ namespace Forecasting
         public void SetSeries(SeriesNames id, Series series)
         {
             content[id] = series;
+            series.BorderWidth = 2;
 
             UpdateSeries();
         }
