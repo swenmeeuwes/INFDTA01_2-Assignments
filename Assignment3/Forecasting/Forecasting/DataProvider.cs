@@ -19,7 +19,7 @@ namespace Forecasting
                 while ((line = streamReader.ReadLine()) != null)
                 {
                     var dimensions = line.Split(';');
-                    var point = new Tuple<float, float>(float.Parse(dimensions[0]), float.Parse(dimensions[1]));
+                    var point = new Tuple<float, float>(float.Parse(dimensions[0]) - 1, float.Parse(dimensions[1])); // -1 because the data is one-index based but the code zero-index based
                     points.Add(point);
                 }
             };
