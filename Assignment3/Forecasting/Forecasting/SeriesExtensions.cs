@@ -126,7 +126,7 @@ namespace Forecasting
             }
 
             // Finish the calculation of "squared error"
-            squaredError /= series.Points.Count - 1;
+            squaredError /= series.Points.Count - 2;
             squaredError = (float)Math.Sqrt(squaredError);
 
             return dataSeries;
