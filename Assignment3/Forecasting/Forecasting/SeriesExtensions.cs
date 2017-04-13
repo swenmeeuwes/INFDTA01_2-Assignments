@@ -84,7 +84,7 @@ namespace Forecasting
         {
             squaredError = 0f;
 
-            var dataSeries = new Series(series.Name + "_data");
+            var dataSeries = new Series(series.Name);
             dataSeries.ChartType = series.ChartType;
 
             var trendSeries = new Series(series.Name + "_trend");
@@ -134,13 +134,18 @@ namespace Forecasting
 
         public static Series FindForecastDesWithLowestError(this Series series, float stepAmount, int sight, out float dataCoefficient, out float trendCoefficient, out float squaredError)
         {
-            dataCoefficient = 0f;
-            trendCoefficient = 0f;
+            dataCoefficient = 0.1f;
+            trendCoefficient = 0.1f;
 
             Series bestSeries = null;
+            var bestDataCoefficient = dataCoefficient;
+            var bestTrendCoefficient = trendCoefficient;
             var lowestError = float.MaxValue;
             while (dataCoefficient < 1f)
             {
+                trendCoefficient = 0.1f;
+                Console.WriteLine("{0}, {1}, {2}", lowestError, dataCoefficient, trendCoefficient);
+
                 float error;
                 while (trendCoefficient < 1f)
                 {
@@ -150,6 +155,8 @@ namespace Forecasting
                     {
                         lowestError = error;
                         bestSeries = tempSeries;
+                        bestDataCoefficient = dataCoefficient;
+                        bestTrendCoefficient = trendCoefficient;                        
                     }
                     else if (error >= lowestError)
                     {
@@ -161,7 +168,13 @@ namespace Forecasting
 
                 dataCoefficient += stepAmount;
             }
+
+            dataCoefficient = bestDataCoefficient;
+            trendCoefficient = bestTrendCoefficient;
             squaredError = lowestError;
+
+            Console.WriteLine("FINAL {0}, {1}, {2}", lowestError, bestDataCoefficient, bestTrendCoefficient);
+
             return bestSeries;
         }
     }
