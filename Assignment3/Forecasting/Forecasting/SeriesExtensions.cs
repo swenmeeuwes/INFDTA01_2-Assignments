@@ -80,56 +80,57 @@ namespace Forecasting
         }
 
         // DES
-        public static Series ForecastDes(this Series series, float dataCoefficient, float trendCoefficient, int sight, out float squaredError)
+        public static Series ForecastDes(this Series series, float dataCoefficient, float trendCoefficient, int lastForecast, out float squaredError)
         {
-            squaredError = 0f;
-
-            var dataSeries = new Series(series.Name);
-            dataSeries.ChartType = series.ChartType;
-
-            var trendSeries = new Series(series.Name + "_trend");
-            trendSeries.ChartType = series.ChartType;
-
-            // Can't smooth/ forecast on the two first points
-            // -> initialisation: 𝑠2=𝑥2, 𝑏2=𝑥2−𝑥1
-            dataSeries.Points.AddXY(1, series.Points[1].YValues[0]); // Dummy point
-            dataSeries.Points.AddXY(1, series.Points[1].YValues[0]); // s2 = x2
-            trendSeries.Points.AddXY(1, series.Points[1].YValues[0] - series.Points[0].YValues[0]); // Dummy point
-            trendSeries.Points.AddXY(1, series.Points[1].YValues[0] - series.Points[0].YValues[0]); // b2 = x2 - x1
-
-            for (int i = 2; i < series.Points.Count; i++)
-            {
-                var dataValueY = dataCoefficient * series.Points[i].YValues[0] + (1f - dataCoefficient) * (dataSeries.Points[i - 1].YValues[0] + trendSeries.Points[i - 1].YValues[0]);
-                dataSeries.Points.AddXY(i, dataValueY);
-
-                var trendValueY = trendCoefficient * (dataSeries.Points[i].YValues[0] - dataSeries.Points[i - 1].YValues[0]) + (1 - trendCoefficient) * trendSeries.Points[i - 1].YValues[0];
-                trendSeries.Points.AddXY(i, trendValueY);
-                
-                squaredError += (float)Math.Pow(dataValueY - series.Points[i].YValues[0], 2);
-            }
-
             // 'Forecast', available at t=3
             if (series.Points.Count < 3)
                 throw new Exception("Need at least 3 data points to forecast DES");
 
-            //var forecastSeries = new Series(series.Name);
-            //forecastSeries.ChartType = series.ChartType;
+            squaredError = 0f;
 
-            for (int i = series.Points.Count; i < series.Points.Count + sight; i++)
+            var forecastSeries = new Series(series.Name);
+            forecastSeries.ChartType = series.ChartType;
+
+            var levelSeries = new Dictionary<int, double>();
+            var trendSeries = new Dictionary<int, double>();
+
+            // Can't smooth/ forecast on the two first points
+            // -> initialisation: 𝑠2=𝑥2, 𝑏2=𝑥2−𝑥1  (so s1=x1, b1=x1-x, since we work 0 index based)
+            levelSeries.Add(1, series.Points[1].YValues[0]);
+            trendSeries.Add(1, series.Points[1].YValues[0] - series.Points[0].YValues[0]);
+
+            var dataPoints = series.Points;
+            for (int i = 2; i < dataPoints.Count; i++)
             {
-                dataSeries.Points.AddXY(i, dataSeries.Points[i - 1].YValues[0] + trendSeries.Points[i - 1].YValues[0]);
+                var s = dataCoefficient * dataPoints[i].YValues[0] + (1.0 - dataCoefficient) * (levelSeries[i - 1] + trendSeries[i - 1]);
+                levelSeries.Add(i, s);
 
-                var trendValueY = trendCoefficient * (dataSeries.Points[i].YValues[0] - dataSeries.Points[i - 1].YValues[0]) + (1 - trendCoefficient) * trendSeries.Points[i - 1].YValues[0];
-                trendSeries.Points.AddXY(i, trendValueY);
+                var b = trendCoefficient * (levelSeries[i] - levelSeries[i - 1]) + (1 - trendCoefficient) * trendSeries[i - 1];
+                trendSeries.Add(i, b);
+            }
 
-                //forecastSeries.Points.AddXY(i, dataSeries.Points[i - 1].YValues[0] + trendSeries.Points[i - 1].YValues[0]);
+            // 'Forecast', available at t=3, which is t=2 in a 0 index based
+            for (int i = 2; i < series.Points.Count; i++)
+            {
+                var f = levelSeries[i - 1] + trendSeries[i - 1];
+                forecastSeries.Points.AddXY(i, f);
+
+                squaredError += (float)Math.Pow(f - series.Points[i].YValues[0], 2);
+            }
+
+            var finalSmoothedValue = levelSeries.Last().Value;
+            var finalEstimateTrend = trendSeries.Last().Value;
+            for (int i = series.Points.Count; i < lastForecast; i++)
+            {
+                var f = finalSmoothedValue + (i - series.Points.Count) * finalEstimateTrend;
+                forecastSeries.Points.AddXY(i, f);
             }
 
             // Finish the calculation of "squared error"
             squaredError /= series.Points.Count - 2;
             squaredError = (float)Math.Sqrt(squaredError);
 
-            return dataSeries;
+            return forecastSeries;
         }
 
         public static Series FindForecastDesWithLowestError(this Series series, float stepAmount, int sight, out float dataCoefficient, out float trendCoefficient, out float squaredError)
@@ -144,11 +145,13 @@ namespace Forecasting
             while (dataCoefficient < 1f)
             {
                 trendCoefficient = 0.1f;
-                Console.WriteLine("{0}, {1}, {2}", lowestError, dataCoefficient, trendCoefficient);
+                
 
                 float error;
                 while (trendCoefficient < 1f)
                 {
+                    Console.WriteLine("{0}, {1}, {2}", lowestError, dataCoefficient, trendCoefficient);
+
                     var tempSeries = series.ForecastDes(dataCoefficient, trendCoefficient, sight, out error);
 
                     if (error < lowestError)

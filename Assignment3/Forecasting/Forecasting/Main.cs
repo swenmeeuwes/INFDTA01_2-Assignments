@@ -39,12 +39,12 @@ namespace Forecasting
             float desDataCoefficient;
             float desTrendCoefficient;
             float desSquaredError;
-            //var desSeries = chart.GetSeries(SeriesNames.Des).FindForecastDesWithLowestError(0.01f, 48 - 37, out desDataCoefficient, out desTrendCoefficient, out desSquaredError);
-            var desSeries = chart.GetSeries(SeriesNames.Des).ForecastDes(0.2f, 0.5f, 48 - 37, out desSquaredError);
+            var desSeries = chart.GetSeries(SeriesNames.Des).FindForecastDesWithLowestError(0.01f, 48, out desDataCoefficient, out desTrendCoefficient, out desSquaredError);
+            //var desSeries = chart.GetSeries(SeriesNames.Des).ForecastDes(0.2f, 0.5f, 48 - 37, out desSquaredError);
             chart.SetSeries(SeriesNames.Des, desSeries);
 
-            textBox_desAlpha.Text = "0.2";// desDataCoefficient.ToString();
-            textBox_desBeta.Text = "0.5";// desTrendCoefficient.ToString();
+            textBox_desAlpha.Text = desDataCoefficient.ToString();
+            textBox_desBeta.Text = desTrendCoefficient.ToString();
             textBox_desError.Text = desSquaredError.ToString();
         }
     }
