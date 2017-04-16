@@ -133,7 +133,7 @@ namespace Forecasting
             return forecastSeries;
         }
 
-        public static Series FindForecastDesWithLowestError(this Series series, float stepAmount, int sight, out float dataCoefficient, out float trendCoefficient, out float squaredError)
+        public static Series FindForecastDesWithLowestError(this Series series, float stepAmount, int lastForecast, out float dataCoefficient, out float trendCoefficient, out float squaredError)
         {
             dataCoefficient = 0.1f;
             trendCoefficient = 0.1f;
@@ -152,7 +152,7 @@ namespace Forecasting
                 {
                     Console.WriteLine("{0}, {1}, {2}", lowestError, dataCoefficient, trendCoefficient);
 
-                    var tempSeries = series.ForecastDes(dataCoefficient, trendCoefficient, sight, out error);
+                    var tempSeries = series.ForecastDes(dataCoefficient, trendCoefficient, lastForecast, out error);
 
                     if (error < lowestError)
                     {
