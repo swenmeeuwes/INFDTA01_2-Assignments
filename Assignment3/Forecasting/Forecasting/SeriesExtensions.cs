@@ -134,35 +134,35 @@ namespace Forecasting
             return forecastSeries;
         }
 
-        public static Series FindForecastDesWithLowestError(this Series series, float stepAmount, int lastForecast, out float dataCoefficient, out float trendCoefficient, out float squaredError)
+        public static Series FindForecastDesWithLowestError(this Series series, float stepAmount, int lastForecast, out float bestDataCoefficient, out float bestTrendCoefficient, out float squaredError)
         {
-            dataCoefficient = 0.1f;
-            trendCoefficient = 0.1f;
+            float dataCoefficient = 0.1f;
+            float trendCoefficient = 0.1f;
+
+            bestDataCoefficient = dataCoefficient;
+            bestTrendCoefficient = trendCoefficient;
 
             Series bestSeries = null;
-            var bestDataCoefficient = dataCoefficient;
-            var bestTrendCoefficient = trendCoefficient;
-            var lowestError = float.MaxValue;
-            while (dataCoefficient < 1f)
-            {
-                trendCoefficient = 0.1f;
-                
-
-                float error;
-                while (trendCoefficient < 1f)
+            float lowestError = float.MaxValue;
+            
+            while(dataCoefficient < 1f)
+            {                
+                while(trendCoefficient < 1f)
                 {
-                    Console.WriteLine("{0}, {1}, {2}", lowestError, dataCoefficient, trendCoefficient);
+                    float testError;
+                    var testSeries = ForecastDes(series, dataCoefficient, trendCoefficient, lastForecast, out testError);
 
-                    var tempSeries = series.ForecastDes(dataCoefficient, trendCoefficient, lastForecast, out error);
-
-                    if (error < lowestError)
+                    if(testError < lowestError)
                     {
-                        lowestError = error;
-                        bestSeries = tempSeries;
+                        bestSeries = testSeries;
+                        lowestError = testError;
+
                         bestDataCoefficient = dataCoefficient;
-                        bestTrendCoefficient = trendCoefficient;                        
+                        bestTrendCoefficient = trendCoefficient;
+
+                        trendCoefficient = 0.1f;
                     }
-                    else if (error >= lowestError)
+                    else // best result for this data coefficient found
                     {
                         break;
                     }
@@ -173,12 +173,7 @@ namespace Forecasting
                 dataCoefficient += stepAmount;
             }
 
-            dataCoefficient = bestDataCoefficient;
-            trendCoefficient = bestTrendCoefficient;
             squaredError = lowestError;
-
-            Console.WriteLine("FINAL {0}, {1}, {2}", lowestError, bestDataCoefficient, bestTrendCoefficient);
-
             return bestSeries;
         }
     }
