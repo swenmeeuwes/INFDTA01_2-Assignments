@@ -39,12 +39,12 @@
             this.textBox_sesAlpha = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textBox_desBeta = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.textBox_desError = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_desAlpha = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox_desBeta = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart_forcasting)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -140,6 +140,23 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "DES";
             // 
+            // textBox_desBeta
+            // 
+            this.textBox_desBeta.Enabled = false;
+            this.textBox_desBeta.Location = new System.Drawing.Point(149, 39);
+            this.textBox_desBeta.Name = "textBox_desBeta";
+            this.textBox_desBeta.Size = new System.Drawing.Size(72, 20);
+            this.textBox_desBeta.TabIndex = 5;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 42);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(138, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Beta smoothing coëfficiënt: ";
+            // 
             // textBox_desError
             // 
             this.textBox_desError.Enabled = false;
@@ -174,27 +191,11 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Alpha smoothing coëfficiënt: ";
             // 
-            // textBox_desBeta
-            // 
-            this.textBox_desBeta.Enabled = false;
-            this.textBox_desBeta.Location = new System.Drawing.Point(149, 39);
-            this.textBox_desBeta.Name = "textBox_desBeta";
-            this.textBox_desBeta.Size = new System.Drawing.Size(72, 20);
-            this.textBox_desBeta.TabIndex = 5;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 42);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(138, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Beta smoothing coëfficiënt: ";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1293, 638);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
