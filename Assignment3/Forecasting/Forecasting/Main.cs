@@ -29,7 +29,7 @@ namespace Forecasting
             // SES
             float sesSmoothingCoefficient;
             float sesSquaredError;
-            var sesSeries = chart.GetSeries(SeriesNames.Ses).FindForecastSesWithLowestError(0.01f, 48 - 37, out sesSmoothingCoefficient, out sesSquaredError);
+            var sesSeries = chart.GetSeries(SeriesNames.Ses).FindForecastSesWithLowestError(0.01f, 48, out sesSmoothingCoefficient, out sesSquaredError);
             chart.SetSeries(SeriesNames.Ses, sesSeries);
 
             textBox_sesAlpha.Text = sesSmoothingCoefficient.ToString();

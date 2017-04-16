@@ -10,12 +10,12 @@ namespace Forecasting
     public static class SeriesExtensions
     {
         // SES
-        public static Series ForecastSes(this Series series, float smoothingCoefficient, int sight, out float squaredError)
+        public static Series ForecastSes(this Series series, float smoothingCoefficient, int lastForecast, out float squaredError)
         {
             squaredError = 0f;
 
-            var smoothenedSeries = new Series(series.Name);
-            smoothenedSeries.ChartType = series.ChartType;
+            var forecastSeries = new Series(series.Name);
+            forecastSeries.ChartType = series.ChartType;
 
             // Can't smooth/ forecast on first point 
             // -> initialize with the average of the first 12 (magic number) points if possible
@@ -26,34 +26,35 @@ namespace Forecasting
                 {
                     sum += (float)series.Points[i].YValues[0];
                 }
-                smoothenedSeries.Points.AddXY(series.Points[0].XValue, sum / 12);
+                forecastSeries.Points.AddXY(0, sum / 12);
             }
             else
                 // If no first 12 points exist just take the first point (x1)
-                smoothenedSeries.Points.AddXY(series.Points[0].XValue, series.Points[0].YValues[0]);
+                forecastSeries.Points.AddXY(0, series.Points[0].YValues[0]);
 
             for (int i = 1; i < series.Points.Count; i++)
             {
-                var smoothenedValueY = smoothingCoefficient * series.Points[i - 1].YValues[0] + (1f - smoothingCoefficient) * smoothenedSeries.Points[i - 1].YValues[0]; // 𝒔𝒕=𝜶𝒙𝒕−𝟏+𝟏−𝜶𝒔𝒕−𝟏
-                smoothenedSeries.Points.AddXY(series.Points[i].XValue, smoothenedValueY);
+                var smoothenedValueY = smoothingCoefficient * series.Points[i - 1].YValues[0] + (1f - smoothingCoefficient) * forecastSeries.Points[i - 1].YValues[0]; // 𝒔𝒕=𝜶𝒙𝒕−𝟏+𝟏−𝜶𝒔𝒕−𝟏
+                forecastSeries.Points.AddXY(i, smoothenedValueY);
 
                 squaredError += (float)Math.Pow(smoothenedValueY - series.Points[i].YValues[0], 2);
             }
 
             // "Forecast"
-            for (int i = series.Points.Count; i < series.Points.Count + sight; i++)
+            var lastSmoothendValue = forecastSeries.Points.Last().YValues[0];
+            for (int i = series.Points.Count; i <= lastForecast; i++)
             {
-                smoothenedSeries.Points.AddXY(i, smoothenedSeries.Points[series.Points.Count - 1].YValues[0]);
+                forecastSeries.Points.AddXY(i, lastSmoothendValue);
             }
 
             // Finish the calculation of "squared error"
             squaredError /= series.Points.Count - 1;
             squaredError = (float)Math.Sqrt(squaredError);
 
-            return smoothenedSeries;
+            return forecastSeries;
         }
 
-        public static Series FindForecastSesWithLowestError(this Series series, float stepAmount, int sight, out float smoothingCoefficient, out float squaredError)
+        public static Series FindForecastSesWithLowestError(this Series series, float stepAmount, int lastForecast, out float smoothingCoefficient, out float squaredError)
         {
             smoothingCoefficient = 0f;
 
@@ -62,7 +63,7 @@ namespace Forecasting
             while(smoothingCoefficient < 1f)
             {
                 float error;
-                var tempSeries = series.ForecastSes(smoothingCoefficient, sight, out error);
+                var tempSeries = series.ForecastSes(smoothingCoefficient, lastForecast, out error);
 
                 if(error < lowestError)
                 {
@@ -120,7 +121,7 @@ namespace Forecasting
 
             var finalSmoothedValue = levelSeries.Last().Value;
             var finalEstimateTrend = trendSeries.Last().Value;
-            for (int i = series.Points.Count; i < lastForecast; i++)
+            for (int i = series.Points.Count; i <= lastForecast; i++)
             {
                 var f = finalSmoothedValue + (i - series.Points.Count) * finalEstimateTrend;
                 forecastSeries.Points.AddXY(i, f);
