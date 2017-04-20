@@ -136,8 +136,8 @@ namespace Forecasting
 
         public static Series FindForecastDesWithLowestError(this Series series, float stepAmount, int lastForecast, out float bestDataCoefficient, out float bestTrendCoefficient, out float squaredError)
         {
-            float dataCoefficient = 0.1f;
-            float trendCoefficient = 0.1f;
+            float dataCoefficient = 0f;
+            float trendCoefficient = 0f;
 
             bestDataCoefficient = dataCoefficient;
             bestTrendCoefficient = trendCoefficient;
@@ -160,7 +160,7 @@ namespace Forecasting
                         bestDataCoefficient = dataCoefficient;
                         bestTrendCoefficient = trendCoefficient;
 
-                        trendCoefficient = 0.1f;
+                        trendCoefficient = 0f;
                     }
                     else // best result for this data coefficient found
                     {

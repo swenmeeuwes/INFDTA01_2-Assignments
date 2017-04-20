@@ -101,6 +101,13 @@ namespace K_means_clustering
             Console.WriteLine("OUTPUT Cluster sizes");
             for (int i = 0; i < bestResult.Length; i++)
             {
+                var floatString = "";
+                var dims = bestResult[i].centroid.dimensions;
+                for (int j = 0; j < bestResult[i].centroid.dimensions.Length; j++)
+                {
+                    floatString += dims[j].ToString() + ";";
+                }
+
                 Console.WriteLine("Cluster {0} has a size of {1}", bestResult[i].id, bestResult[i].size);
             }
 
